@@ -6,7 +6,7 @@ from pathlib import Path, PosixPath, WindowsPath
 from cryptography.fernet import Fernet
 
 class Crypter:
-
+    
     encrypt_ext = (".jpg",)
 
     def __init__(self, mode:str, directory:str, key_scan:bool, key:Optional[str]=None) -> None:
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         action="store",
         metavar="KEY",
         dest="key",
-        help="Specifies the key to be used."
+        help="Specifies the key code to be used."
     )
     # Define keyscan
     key_group.add_argument(
@@ -73,17 +73,18 @@ if __name__ == "__main__":
         "--keyscan",
         action="store_true",
         dest="key_scan",
-        help="Defines whether cryptofiles should look up the key."
+        help="Defines whether cryptofiles should look up the key file."
     )
 
-    # Define directory to execute.
+    # Define directory/path to execute.
     parser.add_argument(
-        "-dir",
-        "--directory",
+        "-t",
+        "--target",
         action="store",
-        default=".",
+        metavar="DIR|PATH",
+        required=True,
         type=str,
-        help="Directory where the encrypt/decrypt starts (default: \".\")"
+        help="Directory or Path to encrypt/decrypt."
     )
 
     args = parser.parse_args()
