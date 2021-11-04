@@ -28,11 +28,26 @@ class Crypter:
                     file_paths.append(file_path)
         return file_paths
 
+    def execute_selected_mode(self, files) -> None:
+        if files:
+            if self.mode == 'encrypt':
+                self.encrypt_files(files)
+            else:
+                self.decrypt_files(files) 
+        
+
+    def encrypt_files(self, file_paths:List[Union[PosixPath, WindowsPath]]) -> None:
+        pass
+
+    def decrypt_files(self, file_paths:List[Union[PosixPath, WindowsPath]]) -> None:
+        pass
+
     def generate_key(self):
         key = Fernet.generate_key()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("cryptfiles")
+
     # Define the action(encrypt/decrypt) mode
     action_group = parser.add_mutually_exclusive_group(required=True)
     action_group.add_argument(
@@ -41,6 +56,7 @@ if __name__ == "__main__":
     action_group.add_argument(
         "-d","--decrypt",action="store_true", help="Run in decryption mode."
     )
+
     # Define key group
     key_group = parser.add_mutually_exclusive_group()
     key_group.add_argument(
@@ -59,6 +75,7 @@ if __name__ == "__main__":
         dest="key_scan",
         help="Defines whether cryptofiles should look up the key."
     )
+
     # Define directory to execute.
     parser.add_argument(
         "-dir",
@@ -70,6 +87,7 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+    
     crypter = Crypter(
         mode = "encrypt" if args.encrypt else "decrypt",
         directory= args.directory,
