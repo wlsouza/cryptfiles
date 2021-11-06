@@ -2,25 +2,25 @@ import os
 import argparse
 from typing import List, Union, Optional
 
-from pathlib import Path, PosixPath, WindowsPath
+from pathlib import Path
 from cryptography.fernet import Fernet
 
 class Crypter:
     
-    encrypt_ext = (".jpg",)
+    encrypt_ext = (".jpg",".txt")
 
-    def __init__(self, mode:str, directory:str, key_scan:bool, key:Optional[str]=None) -> None:
+    def __init__(self, mode:str, target:Union[str,Path], key_scan:bool, key:Optional[str]=None) -> None:
         self.mode = mode
-        self.directory= Path(directory)
+        self.target= Path(target)
         self.key_scan = key_scan
         self.key = key
 
     def run(self):
         print(self.locate_files())
 
-    def locate_files(self) -> List[Optional[Union[PosixPath, WindowsPath]]]:
+    def locate_files(self) -> List[Optional[Path]]:
         file_paths = []
-        for dirpath, dirnames, filenames in os.walk("."): # TODO: pass folder by args
+        for dirpath, dirnames, filenames in os.walk(self.target):
             for filename in filenames:
                 _, file_ext = os.path.splitext(filename)
                 if file_ext.lower() in self.encrypt_ext:
@@ -36,10 +36,10 @@ class Crypter:
                 self.decrypt_files(files) 
         
 
-    def encrypt_files(self, file_paths:List[Union[PosixPath, WindowsPath]]) -> None:
+    def encrypt_files(self, file_paths:List[Path]) -> None:
         pass
 
-    def decrypt_files(self, file_paths:List[Union[PosixPath, WindowsPath]]) -> None:
+    def decrypt_files(self, file_paths:List[Path]) -> None:
         pass
 
     def generate_key(self):
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     
     crypter = Crypter(
         mode = "encrypt" if args.encrypt else "decrypt",
-        directory= args.directory,
+        target= args.directory,
         key_scan= args.key_scan,
         key= args.key
     )
