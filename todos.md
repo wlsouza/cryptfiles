@@ -2,7 +2,7 @@
 - [ ] Criar lista de ext válidas.
 - [x] Criar/configurar argumentos que serão recebidos
 - [ ] Criar testes unitários de cada método abaixo.
-- [ ] Criar método para buscar arquivo(s) para processar.
+- [x] Criar método para buscar arquivo(s) para processar.
 - [ ] Criar método para selecionar modo de processamento
 - [ ] Criar fila e threads para criptografar/descriptografar
 - [ ] Criar método para criptografar

@@ -7,7 +7,7 @@ from cryptography.fernet import Fernet
 
 class Crypter:
     
-    encrypt_ext = (".jpg",".txt")
+    allowed_extensions = (".jpg",".txt")
 
     def __init__(self, mode:str, target:Union[str,Path], key_scan:bool, key:Optional[str]=None) -> None:
         self.mode = mode
@@ -20,13 +20,22 @@ class Crypter:
 
     def locate_files(self) -> List[Optional[Path]]:
         file_paths = []
+
+        if self.target.is_file() and self.is_ext_allowed(self.target):
+            return [self.target]
+
+        # If target is a directory
         for dirpath, dirnames, filenames in os.walk(self.target):
             for filename in filenames:
-                _, file_ext = os.path.splitext(filename)
-                if file_ext.lower() in self.encrypt_ext:
+                if self.is_ext_allowed(filename):
                     file_path = Path(f"{dirpath}/{filename}")
                     file_paths.append(file_path)
         return file_paths
+
+    def is_ext_allowed(self, path:Union[str,Path]) -> bool:
+        file_extension = os.path.splitext(Path(path))[1]
+        return file_extension.lower() in self.allowed_extensions
+
 
     def execute_selected_mode(self, files) -> None:
         if files:
