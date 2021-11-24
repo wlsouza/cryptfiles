@@ -37,7 +37,7 @@ class Crypter:
         return file_extension.lower() in self.allowed_extensions
 
 
-    def execute_selected_mode(self, files) -> None:
+    def execute_selected_mode(self, files:List[Path]) -> None:
         if files:
             if self.mode == 'encrypt':
                 self.encrypt_files(files)
